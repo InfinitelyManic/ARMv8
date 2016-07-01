@@ -1,0 +1,11 @@
+// push2
+.macro push2, xreg1, xreg2
+.push2\@:
+stp     \xreg1, \xreg2, [sp, #-16]!
+.endm
+
+// pop2
+.macro  pop2, xreg1, xreg2
+.pop2\@:
+ldp     \xreg1, \xreg2, [sp], #16
+.endm
