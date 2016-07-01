@@ -9,3 +9,11 @@ stp     \xreg1, \xreg2, [sp, #-16]!
 .pop2\@:
 ldp     \xreg1, \xreg2, [sp], #16
 .endm
+
+// exit
+.macro _exit
+.exit\@:
+mov x8, #93     // exit see /usr/include/asm-generic/unistd.h
+svc 0
+.endm
+
