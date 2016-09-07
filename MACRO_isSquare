@@ -1,0 +1,61 @@
+// isSquare
+/*
+Based in Square roots by subtraction by Frazer Jarvis
+Rule 1 - If a > b, replace a with a - b, and add 10 to b
+Rule 2 - If a < b, add two zeros to the end of a, and add a zero to b just before the final digit (which will always be a five (5))
+if num is sqr then r0 will be 0; else...
+*/
+.macro isSqr num
+.isSquare\@:
+push2 x1, x2
+push2 x3, x4
+push2 x10, x11
+push2 x12, xzr
+        mov x1, \num            // target number
+        mov x2, 5               // let b = 5
+        mul x1, x1, x2          // Let a = 5n
+
+        tst x1, (1 << 1)        // square number bit test
+        bne .exit\@
+
+        mov x3, xzr             // initialize to 0
+        mov x10, 10             // for rule 1 & 2
+        mov x11, 100            // for rule 2
+        mov x12, 0xfff          // loop counter // why am I using such a high number; i.e.,4095
+.L\@:
+        sub x4, x1, x2          // save a - b
+        cmp x1, x2              // is a > b
+
+        // rule 1
+        csel x1, x4, x1, ge      // if a > b then a = a - b
+
+        add x4, x2, x10         // save 10 to b
+        cmp x1, xzr             // is zero?
+        beq .exit\@
+        csel x2, x4, x2, ge     // add 10 to b
+        bge .skip\@
+        // else
+
+        // rule 2
+        mul x1, x1, x11         // add two zeros to the end of b
+        intDiv x2, x10          // b = (xyz / 10 = xy)
+        mul x2, x0, x11         // add a zero to be just before the final digit; which will always be five
+        add x2, x2, 5           // add back final digit; which is always five (5)
+.skip\@:
+        add x3, x3, 1           // increment
+        cmp x3, x12             // are we done yet?
+        blt .L\@
+.exit\@:
+        cmp x1, xzr
+        cset x0, eq             // conditionally set x0 to if x1 == 0
+pop2 x12, xzr
+pop2 x10, x11
+pop2 x3, x4
+pop2 x1, x2
+.endm
+
+.macro gCode num                // Grey code...  https://en.wikipedia.org/wiki/Gray_code
+.gCode\@:
+        mov x0, \num
+        eor x0, x0, x0, lsr 1   // G Code == B XOR (B >> 1 unsigned)
+.endm
