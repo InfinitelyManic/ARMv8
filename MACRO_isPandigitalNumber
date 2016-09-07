@@ -1,0 +1,13 @@
+// isPanDigital
+.macro isPanDigital num
+.isPanDigital\@:
+push2 x9, x10
+        mov x9, \num            // get subject number
+        countSetsInNum x9       // get # of distinct digits
+        mov x10, x0
+        nDigits x9              // get # of number
+        cmp x0, x10             // are # of distinct digits and # of digits the same
+        cset x0, eq
+pop2 x9, x10
+
+.endm
