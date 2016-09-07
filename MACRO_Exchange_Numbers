@@ -1,0 +1,12 @@
+.macro xchg num1 num2
+.xchg\@:
+push2 x20, x21
+        mov x20, \num1
+        mov x21, \num2
+
+        eor x20, x20, x21
+        eor x21, x20, x21
+        eor x20, x20, x21
+
+pop2 x20, x21
+.endm
