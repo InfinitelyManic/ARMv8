@@ -1,0 +1,36 @@
+.macro base10Tb n b
+.base10Tb\@:
+push2 x1,x2
+push2 x3,x4
+push2 x12, xzr
+        mov x1, \n                      // base 10 num
+        mov x2, \b                      // new baseb
+        mov x12, sp                     // save stack address in order to pop the same number of pushes
+        .L0\@:
+                mod x1, x2              // n mod b
+                push2 x0, xzr           // save n mod b onto stack
+                intDiv x1, x2           // new base
+                cmp x0, 0               // need to raise that flag
+                beq .concat\@           // if n is zero exit
+                mov x1, x0              // new n
+                b.al .L0\@
+
+.concat\@:
+                pop2 x4,xzr             // LIFO  - get the first digit
+        .L1\@:
+                cmp sp, x12             // are we back at the original stack level
+                beq  .exit\@
+                pop2 x3, xzr            // next digit
+                // swap A & B
+                eor x3, x3, x4
+                eor x4, x3, x4
+                eor x3, x3, x4
+                concat x3, x4   // first, second, third...
+                mov x4, x0              // new concat num
+                b.al .L1\@
+.exit\@:
+                mov x0, x4              // return concat num
+pop2 x12,xzr
+pop2 x3,x4
+pop2 x1,x2
+.endm
