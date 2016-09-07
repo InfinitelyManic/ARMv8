@@ -1,0 +1,20 @@
+// digitProd
+.macro digitProd num
+.digitProd\@:
+push2 x1, x10
+push2 x11, xzr
+        mov x1, \num
+        mov x10, 10
+        mov x11, 1
+        .L\@:
+                mod x1, x10
+                cinc x0, x0, ne         // conditional inc by 1 if mod is 0
+                mul x11, x11, x0        // save remainder
+
+                intDiv x1, x10          // reduce the numner
+                mov x1, x0              // save new nnumber
+                cbnz x1, .L\@           // conditional branch if zero
+        mov x0, x11                     // return
+pop2 x11, xzr
+pop2 x1, x10
+.endm
