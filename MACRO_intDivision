@@ -1,0 +1,9 @@
+// intDiv
+.macro intDiv num1 num2
+.intDiv\@:
+push2 x1, x2
+        mov x1, \num1
+        mov x2, \num2
+        udiv x0, x1, x2
+pop2 x1, x2
+.endm
