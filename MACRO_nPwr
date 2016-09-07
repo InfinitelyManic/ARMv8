@@ -1,0 +1,21 @@
+// nPwr
+.macro nPwr num pwr
+.nPwr\@:
+push2 x1, x2
+        mov x14, \num
+        mov x15, \pwr
+
+        mov x1, x14
+        mov x2, x15
+
+        mov x0, x1                      // n
+        .L\@:
+                mul x0, x0, x1          // x*x
+                sub x2, x2, 1           // decrement
+                cmp x2, 1
+                csel x0, x1, x0, lt
+                blt .exit\@
+                bne .L\@
+.exit\@:
+pop2 x1, x2
+.endm
