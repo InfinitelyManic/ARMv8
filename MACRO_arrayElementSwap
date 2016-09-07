@@ -1,0 +1,24 @@
+// arrayElementSwap - assumes byte (8 bit) size elements in array
+.macro arrayElementSwap array index1 index2
+push2 x1, x2
+push2 x26, x27
+push2 x28, xzr
+//push2 x10, xzr
+        ldr x28,=\array         // ptr
+        mov x1, \index1
+        mov x2, \index2
+
+        ldrb w26, [x28,x1]
+        ldrb w27, [x28,x2]
+        // swap elements
+        eor w26, w26,w27
+        eor w27, w26,w27
+        eor w26, w26,w27
+        // store swapped elements into array
+        strb w26,[x28,x1]
+        strb w27,[x28,x2]
+//pop2 x10, xzr
+pop2 x28, xzr
+pop2 x26, x27
+pop2 x1, x2
+.endm
