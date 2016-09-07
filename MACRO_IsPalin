@@ -1,0 +1,11 @@
+// isPalin
+.macro isPalin num
+.isPalin\@:
+push2 x1, x2
+        mov x1, \num
+        mov x2, 1
+        digitRev x1
+        cmp x0, x1
+        cset x0, eq
+pop2 x1, x2
+.endm
