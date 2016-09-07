@@ -1,0 +1,18 @@
+// digitSum
+.macro digitSum num
+.digitSum\@:
+push2 x1, x10
+push2 x11, xzr
+        mov x1, \num
+        mov x10, 10
+        mov x11, xzr
+        .L\@:
+                mod x1, x10
+                add x11, x11, x0        // save remainder
+                intDiv x1, x10
+                mov x1, x0
+        cbnz x1, .L\@
+        mov x0, x11
+pop2 x11, xzr
+pop2 x1, x10
+.endm
