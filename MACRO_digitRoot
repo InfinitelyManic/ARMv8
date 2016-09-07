@@ -1,0 +1,10 @@
+// digitRoot
+.macro digitRoot num
+.digitRoot\@:
+push2 x1, xzr
+        mov x1, \num
+        sub x1, x1, 1
+        mod x1, 9
+        add x0, x0, 1
+pop2 x1, xzr
+.endm
