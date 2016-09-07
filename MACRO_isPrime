@@ -1,0 +1,42 @@
+// isPrime
+.macro isPrime n
+.isPrime\@:
+push2 x1, x2
+push2 x3, xzr
+        mov x1, \n
+        // deal with 2
+        cmp x1, 2       // does n == 2
+        cset x0, eq     // if Z flag set then set x0 to 1 else 0
+        beq .exit\@     // exit
+
+        // now do odd number test since all primes are odd save prime 2
+        ands x0, x1, 1  // if result is True then subject bit is set
+        cset x0, ne     // ne = Z flag not set; 1 AND 1 == 1 so clears Z flag; so set x0 to 0 if even num
+        beq .exit\@     // no even number primes except 2 so exit
+
+        // will need to account for signed integers > 2^64-1 -1 at some point
+
+        // all else
+        intSqrt x1              // maz i value
+        mov x3, x0              // max value
+        add x3,x3, #1
+
+        mov x2, #2              // i = counter value; start
+        .loop1\@:
+                // nexted macro
+                mod x1, x2      // mod a i
+                cmp x0, xzr     // is a mod i == 0
+                beq .false\@
+        add x2, x2, #1          // increment i
+        cmp x2, x3              // are we at max
+        blt .loop1\@
+.true\@:                        // return True
+        mov x0, 1
+        b.al .exit\@
+.false\@:                       // return False
+        mov x0, xzr
+        b.al .exit\@
+.exit\@:
+pop2 x3, xzr
+pop2 x1, x2
+.endm
