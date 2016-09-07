@@ -1,0 +1,23 @@
+// isSophieGermain
+.macro isSophie num
+.isSophie\@:
+push2 x1, x2
+        mov x0, xzr
+
+        mov x1, \num
+        mov x2, 2
+
+        isPrime x1
+        cmp x0, 1
+        bne .exit\@
+        cset x0, eq             // set x0 to 1 if isPrime is 1
+
+        mul x1, x2, x1          // 2p
+        add x1, x1, 1           // 2p + 1
+
+        isPrime x1              // is Prime
+        cmp x0, xzr
+        cset x0, ne             // set x0 to 1 if Z is not set
+.exit\@:
+pop2 x1,x2
+.endm
